@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset=utf-8 />
+    <title>Underlay change form</title>
+    <link href="{{ url_for('underlay', filename='underlay.css') }}" type="text/css" rel="stylesheet">
+    <style>
+        form {
+            display: inline;
+        }
+    </style>
+    <link rel="stylesheet" href="static/picnic.min.css">
+</head>
+
+<h2>
+    {% for message in get_flashed_messages() %}
+    <div class="alert">{{ message }}</div>
+    {% endfor %}
+</h2>
+
+<body>
+    <div class="container">
+    <form action="/underlay" method="POST">
+        <p>Domain
+            <select type="text" name="domain">
+                {% for entry in domain_list %}
+                    <option value="{{entry}}" SELECTED>{{entry}}</option>"
+                {% endfor %}
+            </select></p>
+        <p>LLDP Policy
+                <select type="text" name="lldp">
+                    {% for entry in lldp_list %}
+                        <option value="{{entry}}" SELECTED>{{entry}}</option>"
+                    {% endfor %}
+                </select></p>
+        <p>CDP Policy
+                    <select type="text" name="cdp">
+                        {% for entry in cdp_list %}
+                            <option value="{{entry}}" SELECTED>{{entry}}</option>"
+                        {% endfor %}
+                    </select></p>
+        <p>Leaf Selector
+                    <select type="text" name="leaf_block">
+                        {% for entry in leaf_list %}
+                            <option value="{{entry}}" SELECTED>{{entry}}</option>"
+                        {% endfor %}
+                    </select></p>
+        <p>Port Selector
+                        <select type="text" name="port">
+                            {% for entry in port_list %}
+                                <option value="{{entry}}" SELECTED>{{entry}}</option>"
+                            {% endfor %}
+                        </select></p>
+        <p style="float: left; width: 100px"><input type="submit" value="Submit" /></p>
+    </form>
+    <form action="/">
+        <p style="float: left; width: 100px"><input type="submit" value="Return" /></p>
+    </form>
+</div>
+</body>
+
+</html>

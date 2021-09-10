@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset=utf-8 />
+    <title>Static path change form</title>
+    <link href="{{ url_for('static', filename='staticpath.css') }}" type="text/css" rel="stylesheet">
+    <style>
+        form {
+            display: inline;
+        }
+    </style>
+    <link rel="stylesheet" href="static/picnic.min.css">
+</head>
+
+<h2>
+    {% for message in get_flashed_messages() %}
+    <div class="alert">{{ message }}</div>
+    {% endfor %}
+</h2>
+
+<body>
+    <div class="container">
+    <form action="/staticpath" method="POST">
+        <p>EPG Name <input type="text" name="epg" /></p>
+        <p>BD Name <input type="text" name="bd" /></p>
+        <p>Domain <input type="text" name="dom" /></p>
+        <p>Interface
+            <select type="text" name="intf">
+                {% for intf in dropdown_list %}
+                    <option value="{{intf}}" SELECTED>{{intf}}</option>"
+                {% endfor %}
+            </select></p>
+        <p><input type="submit" value="Submit" /></p>
+    </form>
+    <form action="/">
+        <input type="submit" value="Return" />
+    </form>
+</div>
+</body>
+
+</html>

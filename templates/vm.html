@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset=utf-8 />
+    <title>Virtual machine change form</title>
+    <link href="{{ url_for('vm', filename='vm.css') }}" type="text/css" rel="stylesheet">
+    <style>
+        form {
+            display: inline;
+        }
+    </style>
+    <link rel="stylesheet" href="static/picnic.min.css">
+</head>
+
+<h2>
+    {% for message in get_flashed_messages() %}
+    <div class="alert">{{ message }}</div>
+    {% endfor %}
+</h2>
+
+<body>
+    <div class="container">
+        <form action="/vm" method="POST">
+            <p>Virtual Machine Name for
+                <label for="web_vm">Web Tier VM</label><br>
+                <input type="text" id="web_vm" name="web_vm"><br>
+            </p>
+            <p>EPG for Web VM
+                <select type="text" name="web_epg">
+                    {% for entry in epg_list %}
+                    <option value="{{entry}}" SELECTED>{{entry}}</option>"
+                    {% endfor %}
+                </select>
+            </p>
+            <p>Virtual Machine Name for
+                <label for="app_vm">App Tier VM</label><br>
+                <input type="text" id="app_vm" name="app_vm"><br>
+            </p>
+            <p>EPG for App VM
+                <select type="text" name="app_epg">
+                    {% for entry in epg_list %}
+                    <option value="{{entry}}" SELECTED>{{entry}}</option>"
+                    {% endfor %}
+                </select>
+            </p>
+            <p>Virtual Machine Name for
+                <label for="db_vm">DB Tier VM</label><br>
+                <input type="text" id="db_vm" name="db_vm"><br>
+            </p>
+            <p>EPG for DB VM
+                <select type="text" name="db_epg">
+                    {% for entry in epg_list %}
+                    <option value="{{entry}}" SELECTED>{{entry}}</option>"
+                    {% endfor %}
+                </select>
+            </p>
+            <p style="float: left; width: 100px"><input type="submit" value="Submit" /></p>
+        </form>
+        <form action="/">
+            <p style="float: left; width: 100px"><input type="submit" value="Return" /></p>
+        </form>
+    </div>
+</body>
+
+</html>

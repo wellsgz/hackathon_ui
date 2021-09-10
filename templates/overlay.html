@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset=utf-8 />
+    <title>Overlay change form</title>
+    <link href="{{ url_for('overlay', filename='overlay.css') }}" type="text/css" rel="stylesheet">
+    <style>
+        form {
+            display: inline;
+        }
+    </style>
+    <link rel="stylesheet" href="static/picnic.min.css">
+</head>
+
+<h2>
+    {% for message in get_flashed_messages() %}
+    <div class="alert">{{ message }}</div>
+    {% endfor %}
+</h2>
+
+<body>
+    <div class="container">
+        <form action="/overlay" method="POST">
+            <p>
+                <label for="epg1">Web EPG name</label><br>
+                <input type="text" id="epg1" name="epg1"><br>
+            </p>
+            <p>BD for Web EPG
+                <select type="text" name="bd1">
+                    {% for entry in bd_list %}
+                    <option value="{{entry}}" SELECTED>{{entry}}</option>"
+                    {% endfor %}
+                </select>
+            </p>
+            <p>
+                <label for="epg2">App EPG name</label><br>
+                <input type="text" id="epg2" name="epg2"><br>
+            </p>
+            <p>BD for App EPG
+                <select type="text" name="bd2">
+                    {% for entry in bd_list %}
+                    <option value="{{entry}}" SELECTED>{{entry}}</option>"
+                    {% endfor %}
+                </select>
+            </p>
+            <p>
+                <label for="epg3">DB EPG name</label><br>
+                <input type="text" id="epg3" name="epg3"><br>
+            </p>
+            <p>BD for DB EPG
+                <select type="text" name="bd3">
+                    {% for entry in bd_list %}
+                    <option value="{{entry}}" SELECTED>{{entry}}</option>"
+                    {% endfor %}
+                </select>
+            </p>
+            <p style="float: left; width: 100px"><input type="submit" value="Submit" /></p>
+        </form>
+        <form action="/">
+            <p style="float: left; width: 100px"><input type="submit" value="Return" /></p>
+        </form>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        table,
+        th,
+        td {
+            border: 1px solid black;
+        }
+    </style>
+    <link rel="stylesheet" href="static/picnic.min.css">
+</head>
+
+<body>
+    <table>
+        <tr>
+            <th>epg1</th>
+            <th>bd1</th>
+            <th>epg2</th>
+            <th>bd2</th>
+            <th>epg3</th>
+            <th>bd3</th>
+            <th>Change Datetime</th>
+        </tr>
+        {% for record in records %}
+        <tr>
+            <td>{{ record.epg1 }}</td>
+            <td>{{ record.bd1 }}</td>
+            <td>{{ record.epg2 }}</td>
+            <td>{{ record.bd2 }}</td>
+            <td>{{ record.epg3 }}</td>
+            <td>{{ record.bd3 }}</td>
+            <td>{{ record.datetime }}</td>
+            {% endfor %}
+    </table>
+    <form action="/">
+        <input type="submit" value="Return" />
+    </form>
+</body>
+
+</html>

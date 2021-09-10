@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        table,
+        th,
+        td {
+            border: 1px solid black;
+        }
+    </style>
+    <link rel="stylesheet" href="static/picnic.min.css">
+</head>
+
+<body>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Domain</th>
+            <th>LLDP</th>
+            <th>CDP</th>
+            <th>Leaf Block</th>
+            <th>Port</th>
+            <th>AAEP</th>
+            <th>Leaf Profile</th>
+            <th>Change Datetime</th>
+        </tr>
+        {% for record in records %}
+        <tr>
+            <td>{{ record.name }}</td>
+            <td>{{ record.domain }}</td>
+            <td>{{ record.lldp_status }}</td>
+            <td>{{ record.cdp_status }}</td>
+            <td>{{ record.leaf_block }}</td>
+            <td>{{ record.port }}</td>
+            <td>{{ record.aaep_name }}</td>
+            <td>{{ record.leaf_profile }}</td>
+            <td>{{ record.datetime }}</td>
+            {% endfor %}
+    </table>
+    <form action="/">
+        <input type="submit" value="Return" />
+    </form>
+</body>
+
+</html>

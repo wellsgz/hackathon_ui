@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset=utf-8 />
+    <title>Policy change form</title>
+    <link href="{{ url_for('policy', filename='policy.css') }}" type="text/css" rel="stylesheet">
+    <style>
+        form {
+            display: inline;
+        }
+    </style>
+    <link rel="stylesheet" href="static/picnic.min.css">
+</head>
+
+<h2>
+    {% for message in get_flashed_messages() %}
+    <div class="alert">{{ message }}</div>
+    {% endfor %}
+</h2>
+
+<body>
+    <div class="container">
+        <form action="/policy" method="POST">
+            <h2>Con_web_epg_to_app_epg Selector</h2>
+            <p>Consumer EPG
+                <select type="text" name="consumer_epg1">
+                    {% for entry in epg_list %}
+                    <option value="{{entry}}" SELECTED>{{entry}}</option>"
+                    {% endfor %}
+                </select>
+            </p>
+            <p>Provider EPG
+                <select type="text" name="provider_epg1">
+                    {% for entry in epg_list %}
+                    <option value="{{entry}}" SELECTED>{{entry}}</option>"
+                    {% endfor %}
+                </select>
+            </p>
+            <h2>Con_app_epg_to_database_epg Selector</h2>
+            <p>Consumer EPG
+                <select type="text" name="consumer_epg2">
+                    {% for entry in epg_list %}
+                    <option value="{{entry}}" SELECTED>{{entry}}</option>"
+                    {% endfor %}
+                </select>
+            </p>
+            <p>Provider EPG
+                <select type="text" name="provider_epg2">
+                    {% for entry in epg_list %}
+                    <option value="{{entry}}" SELECTED>{{entry}}</option>"
+                    {% endfor %}
+                </select>
+            </p>
+            <p style="float: left; width: 100px"><input type="submit" value="Submit" /></p>
+        </form>
+        <form action="/">
+            <p style="float: left; width: 100px"><input type="submit" value="Return" /></p>
+        </form>
+    </div>
+</body>
+
+</html>

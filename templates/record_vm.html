@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        table,
+        th,
+        td {
+            border: 1px solid black;
+        }
+    </style>
+    <link rel="stylesheet" href="static/picnic.min.css">
+</head>
+
+<body>
+    <table>
+        <tr>
+            <th>web_vm</th>
+            <th>web_epg</th>
+            <th>app_vm</th>
+            <th>app_epg</th>
+            <th>db_vm</th>
+            <th>db_epg</th>
+            <th>Change Datetime</th>
+        </tr>
+        {% for record in records %}
+        <tr>
+            <td>{{ record.web_vm }}</td>
+            <td>{{ record.web_epg }}</td>
+            <td>{{ record.app_vm }}</td>
+            <td>{{ record.app_epg }}</td>
+            <td>{{ record.db_vm }}</td>
+            <td>{{ record.db_epg }}</td>
+            <td>{{ record.datetime }}</td>
+            {% endfor %}
+    </table>
+    <form action="/">
+        <input type="submit" value="Return" />
+    </form>
+</body>
+
+</html>
