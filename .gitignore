@@ -1,3 +1,5 @@
 credential.py
 archive/
 Docker/
+__pycache__
+*.pyc
