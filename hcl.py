@@ -5,14 +5,14 @@ import os
 import github3
 import datetime
 import credential
+import urllib
 
 
 def hcl_underlay(
     name, lldp_status, cdp_status, aaep_name, leaf_profile, leaf_block, port
 ):
-    with open("terraform.auto.tfvars.json", "r") as tfvars_file:
-        tfvars = json.load(tfvars_file)
-        tfvars_file.close()
+    retrieve_conf()
+    tfvars = load_conf()
 
     access_port_group_policy = {
         "leaf_access_port_101_1_19_phydomain": {
@@ -29,21 +29,14 @@ def hcl_underlay(
     }
     tfvars["access_port_group_policy"] = access_port_group_policy
 
-    with open("terraform.auto.tfvars.json", "w") as tfvars_file, open(
-        "archive/terraform.auto.tfvars.json." + str(datetime.datetime.utcnow()), "w"
-    ) as tfvars_archive:
-        json.dump(tfvars, tfvars_file, indent=4, sort_keys=True)
-        json.dump(tfvars, tfvars_archive, indent=4, sort_keys=True)
-        tfvars_file.close()
-        tfvars_archive.close()
+    save_local(tfvars)
     # upload ti github
     github_update()
 
 
 def hcl_overlay(epg1, bd1, epg2, bd2, epg3, bd3):
-    with open("terraform.auto.tfvars.json", "r") as tfvars_file:
-        tfvars = json.load(tfvars_file)
-        tfvars_file.close()
+    retrieve_conf()
+    tfvars = load_conf()
 
     epgs = {
         epg1: {
@@ -74,21 +67,14 @@ def hcl_overlay(epg1, bd1, epg2, bd2, epg3, bd3):
 
     tfvars["epgs"] = epgs
 
-    with open("terraform.auto.tfvars.json", "w") as tfvars_file, open(
-        "archive/terraform.auto.tfvars.json." + str(datetime.datetime.utcnow()), "w"
-    ) as tfvars_archive:
-        json.dump(tfvars, tfvars_file, indent=4, sort_keys=True)
-        json.dump(tfvars, tfvars_archive, indent=4, sort_keys=True)
-        tfvars_file.close()
-        tfvars_archive.close()
+    save_local(tfvars)
     # upload ti github
     github_update()
 
 
 def hcl_policy(consumer_epg1, provider_epg1, consumer_epg2, provider_epg2):
-    with open("terraform.auto.tfvars.json", "r") as tfvars_file:
-        tfvars = json.load(tfvars_file)
-        tfvars_file.close()
+    retrieve_conf()
+    tfvars = load_conf()
 
     contracts = {
         "Con_app_epg_to_database_epg": {
@@ -115,21 +101,14 @@ def hcl_policy(consumer_epg1, provider_epg1, consumer_epg2, provider_epg2):
 
     tfvars["contracts"] = contracts
 
-    with open("terraform.auto.tfvars.json", "w") as tfvars_file, open(
-        "archive/terraform.auto.tfvars.json." + str(datetime.datetime.utcnow()), "w"
-    ) as tfvars_archive:
-        json.dump(tfvars, tfvars_file, indent=4, sort_keys=True)
-        json.dump(tfvars, tfvars_archive, indent=4, sort_keys=True)
-        tfvars_file.close()
-        tfvars_archive.close()
+    save_local(tfvars)
     # upload ti github
     github_update()
 
 
 def hcl_vm(web_vm, app_vm, db_vm, web_epg, app_epg, db_epg):
-    with open("terraform.auto.tfvars.json", "r") as tfvars_file:
-        tfvars = json.load(tfvars_file)
-        tfvars_file.close()
+    retrieve_conf()
+    tfvars = load_conf()
 
     vm = {
         app_vm: {
@@ -145,7 +124,7 @@ def hcl_vm(web_vm, app_vm, db_vm, web_epg, app_epg, db_epg):
             "ipv4_netmask": "24",
             "mac_address": "00:50:56:9a:14:01",
             "memory": "3072",
-            "name": "app01_first_app",
+            "name": app_vm,
             "network": "first_app_tn|first_app_ap|" + app_epg,
             "num_cpus": "2",
             "use_static_mac": True,
@@ -164,7 +143,7 @@ def hcl_vm(web_vm, app_vm, db_vm, web_epg, app_epg, db_epg):
             "ipv4_netmask": "24",
             "mac_address": "00:50:56:9a:15:01",
             "memory": "3072",
-            "name": "database01_first_app",
+            "name": db_vm,
             "network": "first_app_tn|first_app_ap|" + db_epg,
             "num_cpus": "2",
             "use_static_mac": True,
@@ -183,7 +162,7 @@ def hcl_vm(web_vm, app_vm, db_vm, web_epg, app_epg, db_epg):
             "ipv4_netmask": "24",
             "mac_address": "00:50:56:9a:0a:01",
             "memory": "3072",
-            "name": "web01_first_app",
+            "name": web_vm,
             "network": "first_app_tn|first_app_ap|" + web_epg,
             "num_cpus": "1",
             "use_static_mac": True,
@@ -193,13 +172,7 @@ def hcl_vm(web_vm, app_vm, db_vm, web_epg, app_epg, db_epg):
 
     tfvars["vm"] = vm
 
-    with open("terraform.auto.tfvars.json", "w") as tfvars_file, open(
-        "archive/terraform.auto.tfvars.json." + str(datetime.datetime.utcnow()), "w"
-    ) as tfvars_archive:
-        json.dump(tfvars, tfvars_file, indent=4, sort_keys=True)
-        json.dump(tfvars, tfvars_archive, indent=4, sort_keys=True)
-        tfvars_file.close()
-        tfvars_archive.close()
+    save_local(tfvars)
     # upload ti github
     github_update()
 
@@ -230,3 +203,26 @@ def github_update():
         repo.create_file(
             path=file, message="Terraform HCL file".format(file), content=content
         )
+
+
+def retrieve_conf():
+    github_file = "https://raw.githubusercontent.com/christung16/neverenough/main/terraform.auto.tfvars.json"
+    local_file = "terraform.auto.tfvars.json"
+    urllib.request.urlretrieve(github_file, local_file)
+
+
+def load_conf():
+    with open("terraform.auto.tfvars.json", "r") as tfvars_file:
+        tfvars = json.load(tfvars_file)
+        tfvars_file.close()
+    return tfvars
+
+
+def save_local(tfvars):
+    with open("terraform.auto.tfvars.json", "w") as tfvars_file, open(
+        "archive/terraform.auto.tfvars.json." + str(datetime.datetime.utcnow()), "w"
+    ) as tfvars_archive:
+        json.dump(tfvars, tfvars_file, indent=4, sort_keys=True)
+        json.dump(tfvars, tfvars_archive, indent=4, sort_keys=True)
+        tfvars_file.close()
+        tfvars_archive.close()
